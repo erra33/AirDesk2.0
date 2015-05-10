@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Termite.iml" filepath="$PROJECT_DIR$/Termite.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Termite-WifiP2P-SimpleChat/Termite-WifiP2P-SimpleChat.iml" filepath="$PROJECT_DIR$/Termite-WifiP2P-SimpleChat/Termite-WifiP2P-SimpleChat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TermiteCMov.iml" filepath="$PROJECT_DIR$/TermiteCMov.iml" />
+    </modules>
+  </component>
+</project>
+

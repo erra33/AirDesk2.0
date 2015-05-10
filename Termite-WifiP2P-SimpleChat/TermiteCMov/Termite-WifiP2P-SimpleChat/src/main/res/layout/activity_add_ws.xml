@@ -1,0 +1,152 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pt.ulisboa.tecnico.cmov.airdesk.AddWsActivity">
+
+
+
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/saveBtn"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="saveWs"
+        android:enabled="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:id="@+id/cancelBtn"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="cancel" />
+
+    <EditText
+        android:hint="Title of workspace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextTitle"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:singleLine="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Invite others"
+        android:ems="10"
+        android:id="@+id/editTextInvite"
+        android:layout_below="@+id/editTextTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="45dp"
+        android:singleLine="true"
+        android:inputType="textEmailAddress" />
+
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Public"
+        android:id="@+id/checkBoxPublic"
+        android:checked="false"
+        android:layout_below="@+id/editTextInvite"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Keywords"
+        android:ems="10"
+        android:id="@+id/editTextKeyWords"
+        android:layout_below="@+id/checkBoxPublic"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="gone"
+        android:singleLine="true"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:id="@+id/buttonAddInvite"
+        android:layout_alignTop="@+id/editTextInvite"
+        android:layout_toRightOf="@+id/editTextInvite"
+        android:layout_toEndOf="@+id/editTextInvite"
+        android:layout_alignBottom="@+id/editTextInvite"
+        android:onClick="addInvite" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:hint="Size limit"
+        android:id="@+id/editTextSizeLimit"
+        android:layout_above="@+id/editTextInvite"
+        android:layout_toRightOf="@+id/textViewFormat"
+        android:layout_toStartOf="@+id/textView"
+        android:layout_toLeftOf="@+id/textView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewSizeLabel"
+        android:layout_below="@+id/editTextSizeLimit"
+        android:layout_alignRight="@+id/cancelBtn"
+        android:layout_alignEnd="@+id/cancelBtn"
+        android:layout_toRightOf="@+id/textViewFormat"
+        android:layout_toEndOf="@+id/textViewFormat"
+        android:layout_above="@+id/buttonAddInvite" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Bytes"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/textViewSizeLabel"
+        android:layout_alignBottom="@+id/editTextSizeLimit"
+        android:layout_alignParentStart="false"
+        android:gravity="center_vertical" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Invalid email format"
+        android:id="@+id/textViewFormat"
+        android:textColor="#ffff0002"
+        android:visibility="invisible"
+        android:layout_alignTop="@+id/checkBoxPublic"
+        android:layout_toEndOf="@+id/saveBtn" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Invited:"
+        android:id="@+id/textViewInvited"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editTextKeyWords" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewInvites"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewInvited"
+        android:layout_above="@+id/saveBtn" />
+
+
+</RelativeLayout>

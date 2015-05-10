@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="pt.inesc.termite.simplechat"
+    android:versionCode="1"
+    android:versionName="1.0">
+
+    <uses-sdk android:minSdkVersion="10" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:name=".GlobalVariable"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.AppCompat.Light">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service android:name="pt.inesc.termite.wifidirect.service.SimWifiP2pService" />
+
+
+        <activity
+            android:name=".MyWorkspacesActivity"
+            android:label="@string/title_activity_my_workspaces"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".SharedWorkspaces"
+            android:label="@string/title_activity_shared_workspaces"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".RegisterUserActivity"
+            android:label="@string/title_activity_register_user" >
+        </activity>
+
+        <activity
+            android:name=".AddWsActivity"
+            android:label="@string/title_activity_add_ws"
+            android:parentActivityName=".MyWorkspacesActivity"
+            android:windowSoftInputMode="adjustPan" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MyWorkspacesActivity" />
+        </activity>
+
+        <activity
+            android:name=".MyWorkspaceActivity"
+            android:label="@string/title_activity_my_workspace"
+            android:parentActivityName=".MyWorkspacesActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MyWorkspacesActivity" />
+        </activity>
+
+        <activity
+            android:name=".AddFileActivity"
+            android:label="@string/title_activity_add_file"
+            android:parentActivityName=".MyWorkspaceActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MyWorkspaceActivity" />
+        </activity>
+
+        <activity
+            android:windowSoftInputMode="adjustPan"
+            android:name=".EditWsActivity"
+            android:label="@string/title_activity_edit_ws"
+            android:parentActivityName=".MyWorkspacesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MyWorkspacesActivity" />
+        </activity>
+
+        <activity
+            android:name=".ReadFileActivity"
+            android:label="@string/title_activity_read_file"
+            android:parentActivityName=".MyWorkspaceActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MyWorkspaceActivity" />
+        </activity>
+
+        <activity
+            android:name=".EditFileActivity"
+            android:label="@string/title_activity_edit_file"
+            android:parentActivityName=".MyWorkspaceActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MyWorkspaceActivity" />
+        </activity>
+
+    </application>
+</manifest>

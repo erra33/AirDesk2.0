@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SimpleChat</string>
+    <string name="port">10001</string>
+    <string name="title_activity_shared_workspaces">Shared workspaces</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_add">Add</string>
+    <string name="title_activity_my_workspace">My Workspaces</string>
+    <string name="title_activity_single_workspace">SingleWorkspace</string>
+    <string name="title_activity_read_file">ReadFileActivity</string>
+    <string name="title_activity_add_file">AddFileActivity</string>
+    <string name="title_activity_edit_file">EditFileActivity</string>
+    <string name="title_activity_register_user">RegisterUserActivity</string>
+    <string name="title_activity_my_workspaces">My Workspaces</string>
+    <string name="title_activity_add_ws">AddWsActivity</string>
+    <string name="title_activity_edit_ws">EditWsActivity</string>
+    <string name="title_activity_shared_workspace">SharedWorkspace</string>
+
+    
+
+
+</resources>

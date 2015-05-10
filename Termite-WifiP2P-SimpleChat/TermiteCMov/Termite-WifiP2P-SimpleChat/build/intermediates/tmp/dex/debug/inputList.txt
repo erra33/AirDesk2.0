@@ -1,0 +1,6 @@
+C:\Users\erra\AndroidStudioProjects\AirDesk2.0\Termite-WifiP2P-SimpleChat\TermiteCMov\Termite-WifiP2P-SimpleChat\build\intermediates\classes\debug
+C:\Users\erra\AndroidStudioProjects\AirDesk2.0\Termite-WifiP2P-SimpleChat\TermiteCMov\Termite-WifiP2P-SimpleChat\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-9c67a254946dd900c4511fdcdf4eae4bca7574fd.jar
+C:\Users\erra\AndroidStudioProjects\AirDesk2.0\Termite-WifiP2P-SimpleChat\TermiteCMov\Termite-WifiP2P-SimpleChat\build\intermediates\pre-dexed\debug\classes-6d988a878a54227c797ea0404a242f5cae4e1bbc.jar
+C:\Users\erra\AndroidStudioProjects\AirDesk2.0\Termite-WifiP2P-SimpleChat\TermiteCMov\Termite-WifiP2P-SimpleChat\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-763a74fadfa8347691245d4efc990852903ca930.jar
+C:\Users\erra\AndroidStudioProjects\AirDesk2.0\Termite-WifiP2P-SimpleChat\TermiteCMov\Termite-WifiP2P-SimpleChat\build\intermediates\pre-dexed\debug\classes-992810c6e8af86262f8ca533e9bc13a361102413.jar
+C:\Users\erra\AndroidStudioProjects\AirDesk2.0\Termite-WifiP2P-SimpleChat\TermiteCMov\Termite-WifiP2P-SimpleChat\build\intermediates\pre-dexed\debug\classes-7ae7176664cb7d00ec38d5feacafb96bd2cec953.jar
