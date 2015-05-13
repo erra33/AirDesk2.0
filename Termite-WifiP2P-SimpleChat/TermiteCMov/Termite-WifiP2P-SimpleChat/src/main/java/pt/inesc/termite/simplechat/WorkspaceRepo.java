@@ -117,5 +117,43 @@ public class WorkspaceRepo {
             return ws;
         }
 
+    public ArrayList<HashMap<String, String>> getWorkspaceListByEmail(String email) {
+
+        //Open connection to write data
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String selectQuery =  "SELECT  " +
+                Workspace.TABLE + "." +
+                Workspace.KEY_ID+ ", " +
+                Workspace.TABLE + "." +
+                Workspace.KEY_title +
+                " FROM " + Workspace.TABLE +
+                " INNER JOIN " + Invite.TABLE +
+                " ON " + Invite.TABLE + "." +
+                Invite.KEY_workspaceID +
+                "=" + Workspace.TABLE +
+                "." + Workspace.KEY_ID +
+                " WHERE " + Invite.KEY_email + "=?";
+
+        ArrayList<HashMap<String, String>> listOfWs = new ArrayList<HashMap<String, String>>();
+
+        Cursor cursor = db.rawQuery(selectQuery, new String[] { email });
+        // looping through all rows and adding to list
+
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> ws = new HashMap<String, String>();
+                ws.put("id", cursor.getString(cursor.getColumnIndex(Workspace.KEY_ID)));
+                ws.put("title", cursor.getString(cursor.getColumnIndex(File.KEY_title)));
+                listOfWs.add(ws);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return listOfWs;
+
+    }
+
 
 }

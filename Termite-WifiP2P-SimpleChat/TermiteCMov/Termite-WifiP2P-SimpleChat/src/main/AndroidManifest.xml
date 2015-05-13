@@ -22,23 +22,27 @@
         </activity>
 
         <service android:name="pt.inesc.termite.wifidirect.service.SimWifiP2pService" />
+        <activity
+            android:name=".MenuActivity"
+            android:label="@string/title_activity_my_workspaces" >
+        </activity>
 
 
         <activity
             android:name=".MyWorkspacesActivity"
             android:label="@string/title_activity_my_workspaces"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MenuActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".MenuActivity" />
         </activity>
         <activity
             android:name=".SharedWorkspaces"
             android:label="@string/title_activity_shared_workspaces"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MenuActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".MenuActivity" />
         </activity>
         <activity
             android:name=".RegisterUserActivity"
@@ -75,6 +79,16 @@
         </activity>
 
         <activity
+            android:name=".EditFileActivity"
+            android:label="@string/title_activity_edit_file"
+            android:parentActivityName=".MyWorkspaceActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MyWorkspaceActivity" />
+        </activity>
+
+
+        <activity
             android:windowSoftInputMode="adjustPan"
             android:name=".EditWsActivity"
             android:label="@string/title_activity_edit_ws"
@@ -94,13 +108,22 @@
         </activity>
 
         <activity
-            android:name=".EditFileActivity"
-            android:label="@string/title_activity_edit_file"
-            android:parentActivityName=".MyWorkspaceActivity" >
+            android:name=".SharedWorkspace"
+            android:label="@string/title_activity_shared_workspace"
+            android:parentActivityName=".SharedWorkspaces" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MyWorkspaceActivity" />
+                android:value=".SharedWorkspaces" />
         </activity>
+        <activity
+            android:name=".SharedReadFileActivity"
+            android:label="@string/title_activity_read_file"
+            android:parentActivityName=".SharedWorkspace" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SharedWorkspace" />
+        </activity>
+
 
     </application>
 </manifest>

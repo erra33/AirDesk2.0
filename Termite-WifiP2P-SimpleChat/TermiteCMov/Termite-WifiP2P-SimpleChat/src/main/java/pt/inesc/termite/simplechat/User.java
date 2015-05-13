@@ -34,12 +34,12 @@ public class User {
     public String fullName;
 
     public static boolean isEmailAddress(String m){
-        if (m.isEmpty()) return false;
-        if (!m.contains("@")) return false; //email must contain an @
-
-        String[] mArray = m.split("@");
-        if (mArray.length != 2 ) return false; // only one @ allowed
-        if (!mArray[1].contains("build/intermediates/exploded-aar/Termite-WifiP2P-API-20150503/res")) return false; //There must be a dot after the @
+//        if (m.isEmpty()) return false;
+//        if (!m.contains("@")) return false; //email must contain an @
+//
+//        String[] mArray = m.split("@");
+//        if (mArray.length != 2 ) return false; // only one @ allowedWifiP2P
+//        if (!mArray[1].contains(".")) return false; //There must be a dot after the @
 
         return true;
     }

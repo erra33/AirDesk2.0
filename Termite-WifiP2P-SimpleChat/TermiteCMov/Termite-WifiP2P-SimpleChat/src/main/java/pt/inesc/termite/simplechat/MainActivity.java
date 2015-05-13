@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import pt.inesc.termite.wifidirect.SimWifiP2pBroadcast;
 import pt.inesc.termite.wifidirect.SimWifiP2pDevice;
@@ -38,21 +39,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends ActionBarActivity implements
 		PeerListListener, GroupInfoListener {
 
     public static final String TAG = "simplechat";
 
-    private SimWifiP2pManager mManager = null;
-    private Channel mChannel = null;
-    private Messenger mService = null;
-	private SimWifiP2pSocketServer mSrvSocket = null;
-	private ReceiveCommTask mComm = null;
-	private SimWifiP2pSocket mCliSocket = null;
-    private ArrayList<String> peersArrey;
+
+    public static SimWifiP2pManager mManager = null;
+    public static Channel mChannel = null;
+    public static Messenger mService = null;
+
+    public static IncommingCommTask IncomeMsg;
+    public static SimWifiP2pSocketServer mSrvSocket = null;
+
+    public SimWifiP2pSocket mCliSocket2 = null;
+    public ReceiveCommTaskIncome mCommListener = null;
+
+    public ReceiveCommTask mComm = null;
+    public SimWifiP2pSocket mCliSocket = null;
+
+    public static ArrayList<String> peersArrey;
 
     private static boolean mHasItRun = false;
     GlobalVariable bound = null;
+
+    User user;
 
 	public SimWifiP2pManager getManager() {
 		return mManager;
@@ -69,7 +84,7 @@ public class MainActivity extends ActionBarActivity implements
 
         peersArrey = new ArrayList<String>();
         bound = (GlobalVariable) getApplicationContext();
-        Toast.makeText(getApplicationContext(),bound.getBound()+"",Toast.LENGTH_SHORT).show();
+
 
 
         // initialize the UI
@@ -77,7 +92,7 @@ public class MainActivity extends ActionBarActivity implements
 
 
         //Check if it's any user reg
-        User user = new User(this);
+        user = new User(this);
         user.getUser();
 
         if (user.email == null) {
@@ -87,7 +102,6 @@ public class MainActivity extends ActionBarActivity implements
 
 
         if(!mHasItRun) {
-
 
             // initialize the WDSim API
             SimWifiP2pSocketManager.Init(getApplicationContext());
@@ -105,21 +119,25 @@ public class MainActivity extends ActionBarActivity implements
             bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
             // spawn the chat server background task
-            new IncommingCommTask().executeOnExecutor(
-                    AsyncTask.THREAD_POOL_EXECUTOR);
+            IncomeMsg = new IncommingCommTask();
+            IncomeMsg.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
             mHasItRun = true;
         }
 
 
+        Intent intent = new Intent(this, MenuActivity.class);
+        startActivity(intent);
 
 
 	}
 
     // Called when the user clicks the myWs button
     public void startMyWs(View view) {
-        Intent intent = new Intent(this, MyWorkspacesActivity.class);
+        Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
+//        Intent intent = new Intent(this, MyWorkspacesActivity.class);
+//        startActivity(intent);
     }
 
     // Called when the user clicks the sharedWs button
@@ -128,12 +146,18 @@ public class MainActivity extends ActionBarActivity implements
         startActivity(intent);
     }
 
-    // Called when the user clicks the sharedWs button
+    // Called when the user clicks the connect button
     public void connect(View view) {
         new OutgoingCommTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, peersArrey.get(0) + "");
     }
 
-    // Called when the user clicks the sharedWs button
+    // Called when the user clicks the new button
+    public void button(View view) {
+
+    }
+
+
+    // Called when the user clicks the disconnect button
     public void disconnect(View view) {
         if (mCliSocket != null) {
             try {
@@ -143,13 +167,21 @@ public class MainActivity extends ActionBarActivity implements
             }
         }
         mCliSocket = null;
+        if (mCliSocket2 != null) {
+            try {
+                mCliSocket2.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        mCliSocket2 = null;
     }
 
 
     public void send(View view) {
         Toast.makeText(getApplicationContext(), "Send ",Toast.LENGTH_SHORT).show();
         try {
-            mCliSocket.getOutputStream().write( ("hello\n").getBytes());
+            mCliSocket.getOutputStream().write( ("2\n").getBytes());
         } catch (IOException e) {
             Toast.makeText(getApplicationContext(),e.getMessage() +" error",Toast.LENGTH_SHORT).show();
         }
@@ -260,49 +292,6 @@ public class MainActivity extends ActionBarActivity implements
 	 *  Classes implementing chat message exchange
 	 */
 
-	public class IncommingCommTask extends AsyncTask<Void, SimWifiP2pSocket, Void> {
-
-		@Override
-		protected Void doInBackground(Void... params) {
-
-			Log.d(TAG, "IncommingCommTask started (" + this.hashCode() + ").");
-
-			try {
-				mSrvSocket = new SimWifiP2pSocketServer(
-						Integer.parseInt(getString(R.string.port)));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			while (!Thread.currentThread().isInterrupted()) {
-				try {
-					SimWifiP2pSocket sock = mSrvSocket.accept();
-					if (mCliSocket != null && mCliSocket.isClosed()) {
-						mCliSocket = null;
-					}
-					if (mCliSocket != null) {
-						Log.d(TAG, "Closing accepted socket because mCliSocket still active.");
-						sock.close();
-					} else {
-						publishProgress(sock);
-					}
-				} catch (IOException e) {
-					Log.d("Error accepting socket:", e.getMessage());
-					break;
-					//e.printStackTrace();
-				}
-			}
-			return null;
-		}
-
-		@Override
-		protected void onProgressUpdate(SimWifiP2pSocket... values) {
-			mCliSocket = values[0];
-			mComm = new ReceiveCommTask();
-
-            mComm.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mCliSocket);
-		}
-	}
-
 
 	public class OutgoingCommTask extends AsyncTask<String, Void, String> {
 
@@ -312,6 +301,9 @@ public class MainActivity extends ActionBarActivity implements
 			try {
 				mCliSocket = new SimWifiP2pSocket(params[0],
 						Integer.parseInt(getString(R.string.port)));
+
+                mCliSocket.getOutputStream().write( ("1\n").getBytes());
+
 			} catch (UnknownHostException e) {
 				return "Unknown Host:" + e.getMessage();
 			} catch (IOException e) {
@@ -322,65 +314,270 @@ public class MainActivity extends ActionBarActivity implements
 
 		@Override
 		protected void onPostExecute(String result) {
-			mComm = new ReceiveCommTask();
-            mComm.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,mCliSocket);
-
+   			mComm = new ReceiveCommTask();
+            mComm.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mCliSocket);
 		}
 	}
 
-
-	public class ReceiveCommTask extends AsyncTask<SimWifiP2pSocket, String, String> {
-		SimWifiP2pSocket s;
+    public class ReceiveCommTask extends AsyncTask<SimWifiP2pSocket, String, String> {
+        SimWifiP2pSocket s;
 
         @Override
         protected void onPreExecute() {
-            Toast.makeText(getApplicationContext(), "connected ",Toast.LENGTH_SHORT).show();
         }
 
 
         @Override
-		protected String doInBackground(SimWifiP2pSocket... params) {
-			BufferedReader sockIn;
-			String st;
+        protected String doInBackground(SimWifiP2pSocket... params) {
+            BufferedReader sockIn;
+            String  st;
 
-			s = params[0];
-			try {
-				sockIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            s = params[0];
+            try {
+                sockIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
-				while ((st = sockIn.readLine()) != null) {
+                Log.d("Error tjo", sockIn + "");
+
+
+                while ((st = sockIn.readLine()) != null) {
                     publishProgress(st);
-                    if (st.charAt(0) == 'h'){
+                }
+            } catch (IOException e) {
+                Log.d("Error reading socket:", e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+}
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (!s.isClosed()) {
+                try {
+                    s.close();
+                }
+                catch (Exception e) {
+                    Log.d("Error closing socket:", e.getMessage());
+                }
+            }
+            s = null;
+        }
+    }
+
+
+    public class IncommingCommTask extends AsyncTask<Void, SimWifiP2pSocket, Void> {
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try {
+                mSrvSocket = new SimWifiP2pSocketServer(
+                        Integer.parseInt(getString(R.string.port)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    Log.d("innan","tomstreng");
+                    SimWifiP2pSocket sock = mSrvSocket.accept();
+                    Log.d("efter","tomstreng");
+                    if (mCliSocket2 != null && mCliSocket2.isClosed()) {
+                        mCliSocket2 = null;
+                    }
+                    if (mCliSocket2 != null) {
+                        Log.d(TAG, "Closing accepted socket because mCliSocket still active.");
+                        sock.close();
+                    } else {
+                        publishProgress(sock);
+                    }
+                } catch (IOException e) {
+                    Log.d("Error accepting socket:", e.getMessage());
+                    break;
+                    //e.printStackTrace();
+                }
+            }
+            ;
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(SimWifiP2pSocket... values) {
+            mCliSocket2 = values[0];
+            mCommListener = new ReceiveCommTaskIncome();
+            mCommListener.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mCliSocket2);
+        }
+    }
+
+    public class ReceiveCommTaskIncome extends AsyncTask<SimWifiP2pSocket, String, String> {
+        SimWifiP2pSocket s;
+
+        @Override
+        protected void onPreExecute() {
+            Log.d("","");
+        }
+
+
+        @Override
+        protected String doInBackground(SimWifiP2pSocket... params) {
+            BufferedReader sockIn;
+            String st;
+
+            s = params[0];
+            try {
+                sockIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
+
+                while ((st = sockIn.readLine()) != null) {
+                    publishProgress(st);
+
+                    Log.d("fåt in json", st+"");
+
+                    JSONObject json = new JSONObject(st);
+                    String command = json.getString("command");
+                    String ip = json.getString("ip");
+
+
+                    WorkspaceRepo repoWs =  new WorkspaceRepo(getApplicationContext());
+
+                    if (command.compareToIgnoreCase("getWs") == 0) {
+                        String userRemote = json.getString("user");
+
+                        ArrayList<HashMap<String, String>> wsList = repoWs.getWorkspaceListByEmail(userRemote);
+
+
+                        JSONArray jsonList = new JSONArray();
+
+                        for(int i=0; i < wsList.size() ; i++){
+                           jsonList.put(wsList.get(i));
+                           Log.d("wslist", wsList.get(i)+"");
+
+                        }
+                        json = new JSONObject();
+
+                        try{
+                            json.put("ip", ip);
+                            json.put("myName", user.email);
+                            json.put("myName", this);
+
+                            json.put("WsLists",jsonList);
+                        }catch (JSONException e){
+
+                        }
+
                         try {
-                            mCliSocket.getOutputStream().write( ("1hello\n").getBytes());
-                            mCliSocket.getOutputStream().flush();
+                            s.getOutputStream().write((json.toString() + "\n").getBytes());
+                            s.getOutputStream().flush();
+                            s.getOutputStream().close();
+
                         } catch (IOException e) {
-                            Toast.makeText(getApplicationContext(),e.getMessage() +" error",Toast.LENGTH_SHORT).show();
                         }
                     }
+                    else if (command.compareToIgnoreCase("getWsById") == 0) {
 
+                        Log.d("Inne i getwsbyID","pidpfkåsfsdåp");
+
+                        int id = json.getInt("id");
+
+                        Log.d("Inne i getwsbyID",id+"");
+
+
+                        Workspace ws = repoWs.getWorkspaceById(id);
+
+                        Log.d("Inne i getwsbyID",ws+"");
+
+                        FileRepo repo = new FileRepo(getApplicationContext());
+                        ArrayList<HashMap<String, String>> fileList =  repo.getFileList(id);
+
+                        JSONArray jsonList = new JSONArray();
+
+                        for(int i=0; i < fileList.size() ; i++){
+                            jsonList.put(fileList.get(i));
+                        }
+                        json = new JSONObject();
+                        json.put("ws_id",ws.ws_ID);
+                        json.put("ws_title",ws.title);
+                        json.put("ip",ip);
+                        json.put("fileList",jsonList);
+
+
+
+                        try {
+                            s.getOutputStream().write((json.toString() + "\n").getBytes());
+                            s.getOutputStream().flush();
+                            s.getOutputStream().close();
+
+                        } catch (IOException e) {
+                            Log.d("Try send  ", e.getMessage());
+                        }
+
+                    }
+
+                    else if (command.compareToIgnoreCase("getFileById") == 0) {
+
+                        Log.d("Inne i getFilebyID","pidpfkåsfsdåp");
+
+                        int id = json.getInt("id");
+
+                        Log.d("Inne i getFilebyID",id+"");
+
+
+                        FileRepo repoFile = new FileRepo(getApplicationContext());
+                        File file = repoFile.getFileById(id);
+
+                        Log.d("Inne i getFilebyID",file+"");
+
+                        json = new JSONObject();
+                        json.put("file_id",file.file_ID);
+                        json.put("file_title",file.title);
+                        json.put("ip",ip);
+                        json.put("content",file.content);
+                        json.put("author",file.author);
+                        json.put("createdAt", file.createdAt);
+                        json.put("size",file.size);
+
+                        try {
+                            s.getOutputStream().write((json.toString() + "\n").getBytes());
+                            s.getOutputStream().flush();
+                            s.getOutputStream().close();
+
+                        } catch (IOException e) {
+                            Log.d("Try send  ", e.getMessage());
+                        }
+
+                    }
+
+
+
+                    }
+            } catch (IOException e) {
+                Log.d("Error reading socket:", e.getMessage());
+            } catch (JSONException e) {
+                Log.d("Json i server för inkomande msg", e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("danielSuger", "Erik Äger");
+            if (!s.isClosed()) {
+                try {
+                    s.close();
                 }
-			} catch (IOException e) {
-				Log.d("Error reading socket:", e.getMessage());
-			}
-			return null;
-		}
-
-		@Override
-		protected void onProgressUpdate(String... values) {
-            Toast.makeText(getApplicationContext(), "!" + values[0] + "!",Toast.LENGTH_SHORT).show();
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			if (!s.isClosed()) {
-				try {
-					s.close();
-				}
-				catch (Exception e) {
-					Log.d("Error closing socket:", e.getMessage());
-				}
-			}
-			s = null;
-		}
-	}
+                catch (Exception e) {
+                    Log.d("Error closing socket:", e.getMessage());
+                }
+            }
+            s = null;
+        }
+    }
 }

@@ -12,6 +12,7 @@ public class File {
     public static final String KEY_createdAt = "createdAt";
     public static final String KEY_ws = "ws";
     public static final String KEY_size = "size";
+    public static final String KEY_locked_by = "lockedBy";
 
 
     // property help us to keep data
@@ -22,6 +23,7 @@ public class File {
     public String createdAt;
     public int ws;
     public int size;
+    public String lockedBy;
 
     public void setSize() {
         size = ((title.length()+content.length()+author.length())*2);
