@@ -82,9 +82,12 @@ public class SharedWorkspace extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
-//            Intent intent = new Intent(this,AddFileActivityNetwork.class);
-//            intent.putExtra("ws_Id",_Ws_Id);
-//            startActivity(intent);
+            Intent objIndent = new Intent(getApplicationContext(),SharedAddFileActivity.class);
+            Bundle extras = new Bundle();
+            extras.putInt("ws_id", _Ws_Id);
+            extras.putString("file_ip", _Ws_ip);
+            objIndent.putExtras(extras);
+            startActivity(objIndent);
         }
 
 

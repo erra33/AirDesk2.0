@@ -39,6 +39,7 @@ public class SharedEditFileActivity extends ActionBarActivity {
 
     String startTitle;
     String startContent;
+    int _wsId;
 
 
     @Override
@@ -70,7 +71,7 @@ public class SharedEditFileActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_read_file, menu);
+        getMenuInflater().inflate(R.menu.menu_register_user, menu);
         return true;
     }
 
@@ -80,22 +81,6 @@ public class SharedEditFileActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_delete) {
-
-            //popup window
-
-            repo.delete(_File_Id);
-//            Intent intent = new Intent(this, SharedWorkspace.class);
-//            intent.putExtra("ws_Id",_Ws_Id);
-//            startActivity(intent);
-        }
-        else if (id == R.id.action_edit) {
-//            Intent intent = new Intent(this, EditFileActivityNetwork.class);
-//            intent.putExtra("file_Id",_File_Id);
-//            startActivity(intent);
-        }
 
         if (id == android.R.id.home) {
             onBackPressed();
@@ -195,6 +180,7 @@ public class SharedEditFileActivity extends ActionBarActivity {
                     startContent = json.getString("content");
                     startTitle = json.getString("file_title");
                     editTextTitle.setText(json.getString("file_title"));
+                    _wsId = json.getInt("wsID");
 
                 }
                 else {
@@ -288,6 +274,7 @@ public class SharedEditFileActivity extends ActionBarActivity {
                 json.put("user",user.email);
                 json.put("content", content);
                 json.put("title", title);
+                json.put("wsId",_wsId);
 
                 Log.d("Jason from request sharedreadfileactivity  ", json.toString());
 

@@ -96,6 +96,15 @@
                 android:value=".MyWorkspaceActivity" />
         </activity>
 
+        <activity
+            android:name=".SharedAddFileActivity"
+            android:label="@string/title_activity_edit_file"
+            android:parentActivityName=".SharedWorkspace" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SharedWorkspace" />
+        </activity>
+
 
         <activity
             android:windowSoftInputMode="adjustPan"

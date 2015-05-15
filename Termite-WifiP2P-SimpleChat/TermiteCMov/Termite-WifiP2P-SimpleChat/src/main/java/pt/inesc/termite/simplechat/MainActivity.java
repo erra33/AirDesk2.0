@@ -560,8 +560,12 @@ public class MainActivity extends ActionBarActivity implements
                                 file.title = json.getString("title");
                                 file.content = json.getString("content");
                                 file.lockedBy = "Unlocked";
+                                file.setSize();
+                                Workspace workspace = repoWs.getWorkspaceById(file.ws);
+                                if (workspace.sizeLimit-repoFile.getFileSizes(file.ws) >= file.size){
+                                    repoFile.update(file);
+                                }
 
-                                repoFile.update(file);
                             }
 //                        }
 //
@@ -635,6 +639,7 @@ public class MainActivity extends ActionBarActivity implements
                         json.put("createdAt", file.createdAt);
                         json.put("size",file.size);
                         json.put("lockedBy", file.lockedBy);
+                        json.put("wsID", file.ws);
 
                         try {
                             s.getOutputStream().write((json.toString() + "\n").getBytes());
@@ -645,6 +650,73 @@ public class MainActivity extends ActionBarActivity implements
                             Log.d("Try send  ", e.getMessage());
                         }
                     }
+                    else if (command.compareToIgnoreCase("addFile") == 0) {
+
+                        Log.d("Inne i addFile",json+"");
+
+                        String incomingUser = json.getString("user");
+                        FileRepo repoFile = new FileRepo(getApplicationContext());
+                        File file = new File();
+
+                        file.title = json.getString("title");
+                        file.content = json.getString("content");
+                        file.lockedBy = "Unlocked";
+                        file.author = incomingUser;
+                        file.ws = json.getInt("wsid");
+                        file.setSize();
+
+
+
+                        Workspace workspace = repoWs.getWorkspaceById(file.ws);
+
+                        json = new JSONObject();
+
+                        if (repoFile.existsAFileWithTitleInWorkspace(file.title,file.ws)){
+
+                            json.put("status","duplicateTitle");
+
+                            try {
+                                s.getOutputStream().write((json.toString() + "\n").getBytes());
+                                s.getOutputStream().flush();
+                                s.getOutputStream().close();
+
+                            } catch (IOException e) {
+                                Log.d("Try send  ", e.getMessage());
+                            }
+                        }
+
+                        else if(workspace.sizeLimit-repoFile.getFileSizes(file.ws) >= file.size){
+                            repoFile.insert(file);
+
+                            json.put("status","accepted");
+
+                            try {
+                                s.getOutputStream().write((json.toString() + "\n").getBytes());
+                                s.getOutputStream().flush();
+                                s.getOutputStream().close();
+
+                            } catch (IOException e) {
+                                Log.d("Try send  ", e.getMessage());
+                            }
+
+                        }
+                        else if(!(workspace.sizeLimit-repoFile.getFileSizes(file.ws) >= file.size)){
+
+                            json.put("status","size");
+
+                            try {
+                                s.getOutputStream().write((json.toString() + "\n").getBytes());
+                                s.getOutputStream().flush();
+                                s.getOutputStream().close();
+
+                            } catch (IOException e) {
+                                Log.d("Try send  ", e.getMessage());
+                            }
+
+                        }
+
+
+                }
 
 
 
