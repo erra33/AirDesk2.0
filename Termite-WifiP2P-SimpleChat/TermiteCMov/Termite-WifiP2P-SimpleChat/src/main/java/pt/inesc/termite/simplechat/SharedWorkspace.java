@@ -35,26 +35,35 @@ public class SharedWorkspace extends ActionBarActivity {
     private int _Ws_Id=0;
     TextView file_Id;
     String _Ws_ip;
+    Intent intent;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shared_workspace);
+    protected void onStart() {
+        super.onStart();
 
-        Bundle extras = getIntent().getExtras();
+      fileList = new ArrayList<HashMap<String, String>>();
+        Bundle extras = intent.getExtras();
         _Ws_Id = Integer.parseInt(extras.getString("ws_Id"));
         _Ws_ip = extras.getString("ws_ip");
         String _Ws_title = extras.getString("ws_title");
 
         setTitle(_Ws_title);
 
-        Log.d("Ws id  ",_Ws_Id+"");
-        Log.d("Ws ip  ",_Ws_ip);
+        Log.d("Ws id  ", _Ws_Id + "");
+        Log.d("Ws ip  ", _Ws_ip);
 
 
         // kolla om ipen finns
 
         new OutgoingCommTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, _Ws_ip);
+
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_shared_workspace);
+        intent = getIntent();
+
 
     }
     @Override
@@ -101,21 +110,32 @@ public class SharedWorkspace extends ActionBarActivity {
 
                     mCliSocket.getOutputStream().write((json.toString()+"\n").getBytes());
 
-                } catch (UnknownHostException e) {
+                }
+                catch (IOException e) {
+
                     Log.d("error ",e.getMessage());
-                } catch (IOException e) {
+                    Log.d("FINISHING IN SHARED WORKSPACE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",e.getMessage());
+                    return e.getMessage();
+                }
+                catch (JSONException e) {
                     Log.d("error ",e.getMessage());
-                } catch (JSONException e) {
-                    Log.d("error ",e.getMessage());
+                    return e.getMessage();
                 }
                 return null;
             }
 
             @Override
             protected void onPostExecute(String result) {
-                ReceiveCommTask mComm = null;
-                mComm = new ReceiveCommTask();
-                mComm.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mCliSocket);
+                if (result == null){
+                    ReceiveCommTask mComm = null;
+                    mComm = new ReceiveCommTask();
+                    mComm.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mCliSocket);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Networking problems", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+
             }
         }
 
@@ -141,7 +161,9 @@ public class SharedWorkspace extends ActionBarActivity {
                         publishProgress(st);
                     }
                 } catch (IOException e) {
+
                     Log.d("Error reading socket:", e.getMessage());
+                    return e.getMessage();
                 }
                 return null;
             }
@@ -155,6 +177,11 @@ public class SharedWorkspace extends ActionBarActivity {
                 try {
                     json = new JSONObject(values[0]);
                     JSONArray JsonList = json.getJSONArray("fileList");
+
+                    setTitle(json.getString("ws_title"));
+
+
+
 //                Log.d("json",json+"");
 //                Log.d("jsonList",JsonList+"");
 //                Log.d("längdpåjson",JsonList.length()+"");
@@ -220,15 +247,20 @@ public class SharedWorkspace extends ActionBarActivity {
 
             @Override
             protected void onPostExecute(String result) {
-                if (!s.isClosed()) {
-                    try {
-                        s.close();
+                if (result == null) {
+                    if (!s.isClosed()) {
+                        try {
+                            s.close();
+                        } catch (Exception e) {
+                            Log.d("Error closing socket:", e.getMessage());
+                        }
                     }
-                    catch (Exception e) {
-                        Log.d("Error closing socket:", e.getMessage());
-                    }
+                    s = null;
                 }
-                s = null;
+                else{
+                    Toast.makeText(getApplicationContext(), "Networking problems", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
         }
 

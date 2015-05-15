@@ -7,5 +7,7 @@ public class Invite {
     // Labels Table Columns names
     public static final String KEY_workspaceID = "workspaceID";
     public static final String KEY_email = "email";
+    public static final String KEY_keyword = "keyword";
+    public static final String KEY_invited = "invited";
 
 }

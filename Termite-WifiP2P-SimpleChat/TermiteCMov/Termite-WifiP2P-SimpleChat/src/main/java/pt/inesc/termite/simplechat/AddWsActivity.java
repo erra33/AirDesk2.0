@@ -125,7 +125,7 @@ public class AddWsActivity extends ActionBarActivity {
 
             //add to Invite list
             InviteRepo repoInvite = new InviteRepo(this);
-            repoInvite.insert(InviteList, wsID);
+            repoInvite.insert(InviteList, wsID,"",1);
 
             //add to Keword list
             KeywordsRepo repoKeyword = new KeywordsRepo(this);

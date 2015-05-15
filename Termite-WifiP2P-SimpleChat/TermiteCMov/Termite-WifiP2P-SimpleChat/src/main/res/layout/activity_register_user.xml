@@ -47,4 +47,25 @@
         android:layout_alignParentStart="true"
         android:textColor="#ffff0008"
         android:visibility="gone" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="tag1 tag2 tag3 ..."
+        android:ems="10"
+        android:id="@+id/editTextTags"
+        android:singleLine="true"
+        android:layout_below="@+id/editTextFullName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Optional"
+        android:id="@+id/textView2"
+        android:layout_alignBottom="@+id/editTextTags"
+        android:layout_toRightOf="@+id/editTextTags"
+        android:layout_toEndOf="@+id/editTextTags" />
 </RelativeLayout>

@@ -14,9 +14,10 @@ public class User {
         dbHelper = new DBHelper(context);
     }
 
-    public void setUser(String email, String fullName) {
+    public void setUser(String email, String fullName, String keywords) {
         this.email = email;
         this.fullName = fullName;
+        this.keywords = keywords;
         insert(this);
     }
 
@@ -28,10 +29,12 @@ public class User {
     // Labels Table Columns names
     public static final String KEY_email = "email";
     public static final String KEY_fullName = "fullName";
+    public static final String KEY_keywords = "keywords";
 
     // property help us to keep data
     public String email;
     public String fullName;
+    public String keywords;
 
     public static boolean isEmailAddress(String m){
 //        if (m.isEmpty()) return false;
@@ -48,7 +51,8 @@ public class User {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String selectQuery =  "SELECT  " +
                 User.KEY_email + ", " +
-                User.KEY_fullName +
+                User.KEY_fullName + ", " +
+                User.KEY_keywords +
                 " FROM " + User.TABLE;
 
         User user = this;
@@ -59,6 +63,7 @@ public class User {
             do {
                 user.email =cursor.getString(cursor.getColumnIndex(User.KEY_email));
                 user.fullName =cursor.getString(cursor.getColumnIndex(User.KEY_fullName));
+                user.keywords =cursor.getString(cursor.getColumnIndex(User.KEY_keywords));
 
             } while (cursor.moveToNext());
         }
@@ -75,9 +80,23 @@ public class User {
         ContentValues values = new ContentValues();
         values.put(User.KEY_email,user.email);
         values.put(User.KEY_fullName, user.fullName);
+        values.put(User.KEY_keywords, user.keywords);
 
         // Inserting Row
         db.insert(User.TABLE, null, values);
+        db.close(); // Closing database connection
+    }
+
+    public void update(String email, String fullName , String keywords) {
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(User.KEY_email,email);
+        values.put(User.KEY_fullName, fullName);
+        values.put(User.KEY_keywords, keywords);
+
+        db.update(User.TABLE, values, User.KEY_email + "= ?", new String[] { email });
         db.close(); // Closing database connection
     }
 }

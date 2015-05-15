@@ -8,7 +8,7 @@ public class DBHelper  extends SQLiteOpenHelper {
     //version number to upgrade database version
     //each time if you Add, Edit table, you need to change the
     //version number.
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 18;
 
     // Database Name
     private static final String DATABASE_NAME = "airDesk";
@@ -44,11 +44,15 @@ public class DBHelper  extends SQLiteOpenHelper {
 
         String CREATE_TABLE_USER = "CREATE TABLE " + User.TABLE  + "("
                 + User.KEY_email  + " TEXT PRIMARY KEY, "
+                + User.KEY_keywords  + " TEXT, "
                 + User.KEY_fullName + " TEXT)";
+
 
         db.execSQL(CREATE_TABLE_USER);
 
         String CREATE_TABLE_INVITE = "CREATE TABLE " + Invite.TABLE  + "("
+                + Invite.KEY_invited  + " INTEGER, "
+                + Invite.KEY_keyword  + " TEXT, "
                 + Invite.KEY_workspaceID  + " INTEGER, "
                 + Invite.KEY_email + " TEXT)";
 

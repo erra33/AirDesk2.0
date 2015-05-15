@@ -51,17 +51,24 @@ public class SharedWorkspaces extends ActionBarActivity implements SimWifiP2pMan
 
 
     GlobalVariable bound;
+    Intent intent;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shared_workspaces);
-
-
+    protected void onStart() {
+        super.onStart();
+        if (MainActivity.mManager == null) finish();
         MainActivity.mManager.requestGroupInfo(MainActivity.mChannel, (SimWifiP2pManager.GroupInfoListener) this);
 
         user = new User(this);
         user.getUser();
+
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_shared_workspaces);
+        intent = getIntent();
 
     }
 
@@ -121,12 +128,11 @@ public class SharedWorkspaces extends ActionBarActivity implements SimWifiP2pMan
                 JSONObject json = new JSONObject();
                 json.put("user", user.email);
                 json.put("ip", params[0]);
+                json.put("keywords", user.keywords );
                 json.put("command", "getWs");
 
                 mCliSocket.getOutputStream().write((json.toString()+"\n").getBytes());
 
-            } catch (UnknownHostException e) {
-                return "Unknown Host:" + e.getMessage();
             } catch (IOException e) {
                 return "IO error:" + e.getMessage();
             } catch (JSONException e) {

@@ -70,8 +70,30 @@ public class RegisterUserActivity extends ActionBarActivity {
     public void insertUser(View view) {
 
         User user = new User(this);
-        EditText editTextEmail = (EditText) findViewById(R.id.editTextEmail);
-        EditText editTextFullName = (EditText) findViewById(R.id.editTextFullName);
+        final EditText editTextEmail = (EditText) findViewById(R.id.editTextEmail);
+        final EditText editTextFullName = (EditText) findViewById(R.id.editTextFullName);
+        EditText editTextKeywords = (EditText) findViewById(R.id.editTextTags);
+
+
+
+        TextWatcher tW = new TextWatcher(){
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            public void afterTextChanged(Editable s) {
+                Button b = (Button) findViewById(R.id.buttonSave);
+                if (User.isEmailAddress(editTextEmail.getText().toString()) && !editTextFullName.getText().toString().isEmpty()){
+                    b.setEnabled(true);
+                }
+                else b.setEnabled(false);
+            }
+        };
+        editTextEmail.addTextChangedListener(tW);
+        editTextFullName.addTextChangedListener(tW);
+
+
         if (!User.isEmailAddress(editTextEmail.getText().toString())){
             findViewById(R.id.textViewFormat).setVisibility(View.VISIBLE);
         }
@@ -81,10 +103,10 @@ public class RegisterUserActivity extends ActionBarActivity {
             //user.fullName = editTextFullName.getText().toString();
             //repo.insert(user);
 
-            user.setUser(editTextEmail.getText().toString(), editTextFullName.getText().toString());
+            user.setUser(editTextEmail.getText().toString(), editTextFullName.getText().toString(), editTextKeywords.getText().toString());
 
             Toast.makeText(this, "Account successfully created", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, MenuActivity.class);
             startActivity(intent);
         }
     }

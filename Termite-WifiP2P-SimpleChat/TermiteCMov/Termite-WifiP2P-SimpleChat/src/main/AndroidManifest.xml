@@ -50,6 +50,15 @@
         </activity>
 
         <activity
+            android:name=".EditUserActivity"
+            android:label="@string/title_activity_edit_user"
+            android:parentActivityName=".MenuActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MenuActivity" />
+        </activity>
+
+        <activity
             android:name=".AddWsActivity"
             android:label="@string/title_activity_add_ws"
             android:parentActivityName=".MyWorkspacesActivity"
@@ -123,6 +132,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SharedWorkspace" />
         </activity>
+
+        <activity
+            android:name=".SharedEditFileActivity"
+            android:label="@string/title_activity_edit_file"
+            android:parentActivityName=".SharedReadFileActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SharedReadFileActivity" />
+        </activity>
+
 
 
     </application>

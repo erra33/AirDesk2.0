@@ -30,6 +30,7 @@ public class FileRepo {
         values.put(File.KEY_createdAt, timestamp);
         values.put(File.KEY_ws, file.ws);
         values.put(File.KEY_size, file.size);
+        values.put(File.KEY_locked_by, "Unlocked");
 
 
         // Inserting Row
@@ -54,6 +55,7 @@ public class FileRepo {
         values.put(File.KEY_title, file.title);
         values.put(File.KEY_author, file.author);
         values.put(File.KEY_size, file.size);
+        values.put(File.KEY_locked_by, file.lockedBy);
 
         db.update(File.TABLE, values, File.KEY_ID + "= ?", new String[] { String.valueOf(file.file_ID) });
         db.close(); // Closing database connection
@@ -111,6 +113,7 @@ public class FileRepo {
                 file.createdAt =cursor.getString(cursor.getColumnIndex(File.KEY_createdAt));
                 file.ws =cursor.getInt(cursor.getColumnIndex(File.KEY_ws));
                 file.size = cursor.getInt(cursor.getColumnIndex(File.KEY_size));
+                file.lockedBy = cursor.getString(cursor.getColumnIndex(File.KEY_locked_by));
 
             } while (cursor.moveToNext());
         }

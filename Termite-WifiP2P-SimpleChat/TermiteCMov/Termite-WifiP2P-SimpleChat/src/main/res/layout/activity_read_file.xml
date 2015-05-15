@@ -4,7 +4,7 @@
     tools:context="pt.ulisboa.tecnico.cmov.airdesk.ReadFileActivity">
 
     <TextView
-        android:text="asdf"
+
         android:id="@+id/file_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

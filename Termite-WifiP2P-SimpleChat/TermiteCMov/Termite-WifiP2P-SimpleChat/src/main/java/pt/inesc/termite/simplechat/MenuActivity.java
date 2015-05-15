@@ -39,15 +39,23 @@ public class MenuActivity  extends ActionBarActivity  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
+
         // initialize the UI
         setContentView(R.layout.activity_menu);
-
+        User user = new User(this);
+        setTitle(user.getUser().fullName);
 
     }
 
     // Called when the user clicks the myWs button
     public void startMyWs(View view) {
         Intent intent = new Intent(this, MyWorkspacesActivity.class);
+        startActivity(intent);
+    }
+    public void startEditProfile(View view) {
+        Intent intent = new Intent(this, EditUserActivity.class);
         startActivity(intent);
     }
 
@@ -78,6 +86,14 @@ public class MenuActivity  extends ActionBarActivity  {
 //        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
 

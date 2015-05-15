@@ -46,7 +46,8 @@
         android:layout_below="@+id/checkBoxPublic"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -78,13 +79,19 @@
         android:layout_alignStart="@+id/cancelBtn" />
 
     <ListView
+    android:layout_width="wrap_content"
+    android:layout_height="128dp"
+    android:id="@+id/listViewInvite"
+    android:layout_gravity="left|top"
+    android:layout_below="@+id/textViewInvite"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true" />
+
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="128dp"
-        android:id="@+id/listViewInvite"
-        android:layout_gravity="left|top"
-        android:layout_below="@+id/textViewInvite"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/listViewDelete"
+        android:visibility="invisible"/>
 
     <TextView
         android:layout_width="wrap_content"

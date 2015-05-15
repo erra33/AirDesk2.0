@@ -1300,9 +1300,9 @@ containing a value of this type.
         public static final int ic_launcher=0x7f020033;
     }
     public static final class id {
-        public static final int NetworksGroups=0x7f080051;
-        public static final int Send=0x7f080053;
-        public static final int action_add=0x7f080064;
+        public static final int NetworksGroups=0x7f080052;
+        public static final int Send=0x7f080054;
+        public static final int action_add=0x7f080068;
         public static final int action_bar=0x7f080031;
         public static final int action_bar_activity_content=0x7f080000;
         public static final int action_bar_container=0x7f080030;
@@ -1311,8 +1311,8 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f08001f;
         public static final int action_bar_title=0x7f08001e;
         public static final int action_context_bar=0x7f080032;
-        public static final int action_delete=0x7f080065;
-        public static final int action_edit=0x7f080066;
+        public static final int action_delete=0x7f080069;
+        public static final int action_edit=0x7f08006a;
         public static final int action_menu_divider=0x7f080002;
         public static final int action_menu_presenter=0x7f080003;
         public static final int action_mode_bar=0x7f08002e;
@@ -1321,50 +1321,53 @@ containing a value of this type.
         public static final int activity_chooser_view_content=0x7f080021;
         public static final int always=0x7f080016;
         public static final int beginning=0x7f080013;
-        public static final int button=0x7f080055;
+        public static final int button=0x7f080056;
         public static final int buttonAddInvite=0x7f080046;
-        public static final int buttonSave=0x7f08005c;
+        public static final int buttonEditProfile=0x7f080057;
+        public static final int buttonSave=0x7f08005e;
         public static final int cancelBtn=0x7f080041;
         public static final int checkBoxPublic=0x7f080044;
         public static final int checkbox=0x7f080029;
         public static final int collapseActionView=0x7f080017;
-        public static final int connect=0x7f080054;
+        public static final int connect=0x7f080055;
         public static final int decor_content_parent=0x7f08002f;
         public static final int default_activity_button=0x7f080024;
-        public static final int delete_btn=0x7f080060;
+        public static final int delete_btn=0x7f080064;
         public static final int dialog=0x7f08001b;
         public static final int disableHome=0x7f08000c;
-        public static final int disconnect=0x7f080052;
+        public static final int disconnect=0x7f080053;
         public static final int dropdown=0x7f08001c;
         public static final int editTextContent=0x7f080042;
-        public static final int editTextEmail=0x7f08005a;
-        public static final int editTextFullName=0x7f08005b;
+        public static final int editTextEmail=0x7f08005c;
+        public static final int editTextFullName=0x7f08005d;
         public static final int editTextInvite=0x7f080043;
         public static final int editTextKeyWords=0x7f080045;
         public static final int editTextSizeLimit=0x7f080047;
+        public static final int editTextTags=0x7f08005f;
         public static final int editTextTitle=0x7f08003f;
         public static final int edit_query=0x7f080033;
         public static final int end=0x7f080014;
         public static final int expand_activities_button=0x7f080022;
         public static final int expanded_menu=0x7f080028;
-        public static final int file_Id=0x7f08005d;
-        public static final int file_author=0x7f080059;
-        public static final int file_content=0x7f080057;
-        public static final int file_createdAt=0x7f080058;
-        public static final int file_title=0x7f08005e;
+        public static final int file_Id=0x7f080061;
+        public static final int file_author=0x7f08005b;
+        public static final int file_content=0x7f080059;
+        public static final int file_createdAt=0x7f08005a;
+        public static final int file_title=0x7f080062;
         public static final int home=0x7f080004;
         public static final int homeAsUp=0x7f08000d;
         public static final int icon=0x7f080026;
         public static final int ifRoom=0x7f080018;
         public static final int image=0x7f080023;
-        public static final int list=0x7f080056;
+        public static final int list=0x7f080058;
         public static final int listMode=0x7f080009;
+        public static final int listViewDelete=0x7f08004f;
         public static final int listViewInvite=0x7f08004d;
         public static final int listViewInvites=0x7f08004c;
         public static final int list_item=0x7f080025;
-        public static final int list_item_string=0x7f08005f;
+        public static final int list_item_string=0x7f080063;
         public static final int middle=0x7f080015;
-        public static final int myWS=0x7f08004f;
+        public static final int myWS=0x7f080050;
         public static final int never=0x7f080019;
         public static final int none=0x7f08000e;
         public static final int normal=0x7f08000a;
@@ -1382,7 +1385,7 @@ containing a value of this type.
         public static final int search_plate=0x7f080039;
         public static final int search_src_text=0x7f08003a;
         public static final int search_voice_btn=0x7f08003e;
-        public static final int sharedWS=0x7f080050;
+        public static final int sharedWS=0x7f080051;
         public static final int shortcut=0x7f08002a;
         public static final int showCustom=0x7f08000f;
         public static final int showHome=0x7f080010;
@@ -1391,6 +1394,7 @@ containing a value of this type.
         public static final int submit_area=0x7f08003c;
         public static final int tabMode=0x7f08000b;
         public static final int textView=0x7f080049;
+        public static final int textView2=0x7f080060;
         public static final int textViewFormat=0x7f080048;
         public static final int textViewInvite=0x7f08004e;
         public static final int textViewInvited=0x7f08004b;
@@ -1400,9 +1404,9 @@ containing a value of this type.
         public static final int useLogo=0x7f080012;
         public static final int withText=0x7f08001a;
         public static final int wrap_content=0x7f08001d;
-        public static final int ws_Id=0x7f080061;
-        public static final int ws_ip=0x7f080062;
-        public static final int ws_title=0x7f080063;
+        public static final int ws_Id=0x7f080065;
+        public static final int ws_ip=0x7f080066;
+        public static final int ws_title=0x7f080067;
     }
     public static final class integer {
         public static final int abc_max_action_buttons=0x7f090000;
@@ -1486,14 +1490,15 @@ containing a value of this type.
         public static final int title_activity_add_file=0x7f0a0017;
         public static final int title_activity_add_ws=0x7f0a0018;
         public static final int title_activity_edit_file=0x7f0a0019;
-        public static final int title_activity_edit_ws=0x7f0a001a;
-        public static final int title_activity_my_workspace=0x7f0a001b;
-        public static final int title_activity_my_workspaces=0x7f0a001c;
-        public static final int title_activity_read_file=0x7f0a001d;
-        public static final int title_activity_register_user=0x7f0a001e;
-        public static final int title_activity_shared_workspace=0x7f0a001f;
-        public static final int title_activity_shared_workspaces=0x7f0a0020;
-        public static final int title_activity_single_workspace=0x7f0a0021;
+        public static final int title_activity_edit_user=0x7f0a001a;
+        public static final int title_activity_edit_ws=0x7f0a001b;
+        public static final int title_activity_my_workspace=0x7f0a001c;
+        public static final int title_activity_my_workspaces=0x7f0a001d;
+        public static final int title_activity_read_file=0x7f0a001e;
+        public static final int title_activity_register_user=0x7f0a001f;
+        public static final int title_activity_shared_workspace=0x7f0a0020;
+        public static final int title_activity_shared_workspaces=0x7f0a0021;
+        public static final int title_activity_single_workspace=0x7f0a0022;
     }
     public static final class style {
         /** 

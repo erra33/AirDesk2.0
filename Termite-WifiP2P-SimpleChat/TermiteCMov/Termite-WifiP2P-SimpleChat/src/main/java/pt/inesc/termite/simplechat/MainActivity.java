@@ -69,6 +69,11 @@ public class MainActivity extends ActionBarActivity implements
 
     User user;
 
+    private int  noOfNetworkDevices;
+    boolean userWithLockIsAway;
+    int devicesCounter;
+
+
 	public SimWifiP2pManager getManager() {
 		return mManager;
 	}
@@ -91,14 +96,7 @@ public class MainActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_main);
 
 
-        //Check if it's any user reg
-        user = new User(this);
-        user.getUser();
 
-        if (user.email == null) {
-            Intent intentRegUser = new Intent(this, RegisterUserActivity.class);
-            startActivity(intentRegUser);
-        }
 
 
         if(!mHasItRun) {
@@ -125,10 +123,17 @@ public class MainActivity extends ActionBarActivity implements
             mHasItRun = true;
         }
 
+        //Check if it's any user reg
+        user = new User(this);
+        user.getUser();
 
-        Intent intent = new Intent(this, MenuActivity.class);
-        startActivity(intent);
-
+        if (user.email == null) {
+            Intent intentRegUser = new Intent(this, RegisterUserActivity.class);
+            startActivity(intentRegUser);
+        }else {
+            Intent intent = new Intent(this, MenuActivity.class);
+            startActivity(intent);
+        }
 
 	}
 
@@ -265,6 +270,7 @@ public class MainActivity extends ActionBarActivity implements
                                      SimWifiP2pInfo groupInfo) {
 
         // compile list of network members
+
         StringBuilder peersStr = new StringBuilder();
         for (String deviceName : groupInfo.getDevicesInNetwork()) {
             SimWifiP2pDevice device = devices.getByName(deviceName);
@@ -444,25 +450,26 @@ public class MainActivity extends ActionBarActivity implements
 
                     WorkspaceRepo repoWs =  new WorkspaceRepo(getApplicationContext());
 
-                    if (command.compareToIgnoreCase("getWs") == 0) {
-                        String userRemote = json.getString("user");
 
-                        ArrayList<HashMap<String, String>> wsList = repoWs.getWorkspaceListByEmail(userRemote);
+                    if (command.compareToIgnoreCase("getWs") == 0) {//Returns a list of workspaces
+                        String userRemote = json.getString("user");
+                        String keywords = json.getString("keywords");
+
+                        ArrayList<HashMap<String, String>> wsList = repoWs.getWorkspaceListByEmail(userRemote,keywords);
+
 
 
                         JSONArray jsonList = new JSONArray();
 
                         for(int i=0; i < wsList.size() ; i++){
-                           jsonList.put(wsList.get(i));
-                           Log.d("wslist", wsList.get(i)+"");
+                            jsonList.put(wsList.get(i));
+                            Log.d("wslist", wsList.get(i)+"");
 
                         }
                         json = new JSONObject();
-
                         try{
                             json.put("ip", ip);
                             json.put("myName", user.email);
-                            json.put("myName", this);
 
                             json.put("WsLists",jsonList);
                         }catch (JSONException e){
@@ -477,6 +484,27 @@ public class MainActivity extends ActionBarActivity implements
                         } catch (IOException e) {
                         }
                     }
+
+                    if (command.compareToIgnoreCase("getEmail") == 0) {//Returns a list of workspaces
+
+                        json = new JSONObject();
+                        try{
+                            json.put("ip", ip);
+                            json.put("email", user.email);
+
+                        }catch (JSONException e){
+
+                        }
+
+                        try {
+                            s.getOutputStream().write((json.toString() + "\n").getBytes());
+                            s.getOutputStream().flush();
+                            s.getOutputStream().close();
+
+                        } catch (IOException e) {
+                        }
+                    }
+
                     else if (command.compareToIgnoreCase("getWsById") == 0) {
 
                         Log.d("Inne i getwsbyID","pidpfkåsfsdåp");
@@ -517,17 +545,84 @@ public class MainActivity extends ActionBarActivity implements
 
                     }
 
+                    else if (command.compareToIgnoreCase("editFileUpdateByID") == 0) {
+
+                        Log.d("Inne i editFileUpdateByID",json+"");
+
+                        int id = json.getInt("id");
+                        String incomingUser = json.getString("user");
+                         FileRepo repoFile = new FileRepo(getApplicationContext());
+                        File file = repoFile.getFileById(id);
+
+                        Log.d("File locked by ",file.lockedBy+"");
+
+                            if (file.lockedBy.equals(incomingUser)){
+                                file.title = json.getString("title");
+                                file.content = json.getString("content");
+                                file.lockedBy = "Unlocked";
+
+                                repoFile.update(file);
+                            }
+//                        }
+//
+//                        Log.d("Inne i getFilebyID",file+"");
+//
+//                        json = new JSONObject();
+//                        json.put("file_id",file.file_ID);
+//                        json.put("file_title",file.title);
+//                        json.put("ip",ip);
+//                        json.put("content",file.content);
+//                        json.put("author",file.author);
+//                        json.put("createdAt", file.createdAt);
+//                        json.put("size",file.size);
+//                        json.put("lockedBy", file.lockedBy);
+//
+//                        try {
+//                            s.getOutputStream().write((json.toString() + "\n").getBytes());
+//                            s.getOutputStream().flush();
+//                            s.getOutputStream().close();
+//
+//                        } catch (IOException e) {
+//                            Log.d("Try send  ", e.getMessage());
+//                        }
+                    }
+
+
+
                     else if (command.compareToIgnoreCase("getFileById") == 0) {
 
                         Log.d("Inne i getFilebyID","pidpfkåsfsdåp");
 
                         int id = json.getInt("id");
+                        boolean lock = json.getBoolean("doLock");
+
+
 
                         Log.d("Inne i getFilebyID",id+"");
 
 
                         FileRepo repoFile = new FileRepo(getApplicationContext());
                         File file = repoFile.getFileById(id);
+
+                        Log.d("file information",file.lockedBy+"");
+
+                        if (lock){
+
+
+                            if (file.lockedBy.equals("Unlocked")){
+                                String user = json.getString("user");
+                                file.lockedBy = user;
+                                repoFile.update(file);
+                            }
+                            else {
+                                //CHECK IF LOCKEDBY IS STILL CONNECTED
+//                                userWithLockIsAway = true;
+//                                devicesCounter = 0;
+//                                mManager.requestGroupInfo(mChannel, (GroupInfoListener) MainActivity.this);
+//                                unlockLock(file);
+                                //Add Thread.sleep()?
+                            }
+                        }
 
                         Log.d("Inne i getFilebyID",file+"");
 
@@ -539,6 +634,7 @@ public class MainActivity extends ActionBarActivity implements
                         json.put("author",file.author);
                         json.put("createdAt", file.createdAt);
                         json.put("size",file.size);
+                        json.put("lockedBy", file.lockedBy);
 
                         try {
                             s.getOutputStream().write((json.toString() + "\n").getBytes());
@@ -548,8 +644,8 @@ public class MainActivity extends ActionBarActivity implements
                         } catch (IOException e) {
                             Log.d("Try send  ", e.getMessage());
                         }
-
                     }
+
 
 
 
@@ -580,4 +676,133 @@ public class MainActivity extends ActionBarActivity implements
             s = null;
         }
     }
+
+    public void unlockLock(File file){
+        noOfNetworkDevices= peersArrey.size();
+//        for (String deviceIp : peersArrey) {
+//            new OutgoingCommTaskLock().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,  deviceIp + "", file);
+//        }
+        for (int i = 0; i < peersArrey.size(); i++){ //String deviceIp : peersArrey) {
+            new OutgoingCommTaskLock().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,  peersArrey.get(i) + "", file);
+        }
+
+    }
+
+    public class OutgoingCommTaskLock extends AsyncTask<Object, Void, File> {
+        SimWifiP2pSocket mCliSocket;
+
+        @Override
+        protected File doInBackground(Object... params) {
+            File inFile = null;
+            try {
+                String ipIn = (String) params[0];
+                Log.d("ip in is ", ipIn);
+                mCliSocket = new SimWifiP2pSocket(ipIn,
+                        Integer.parseInt(getString(R.string.port)));
+                inFile = (File) params[1];
+
+                Log.d("filen innehåller title bla", inFile.title);
+
+                JSONObject json = new JSONObject();
+                json.put("ip", ipIn);
+                json.put("command", "getEmail");
+
+                mCliSocket.getOutputStream().write((json.toString()+"\n").getBytes());
+
+            } catch (UnknownHostException e) {
+                Log.d("Unknown Host:" + e.getMessage(),"");
+            } catch (IOException e) {
+                Log.d("IO error:" + e.getMessage(),"");
+            } catch (JSONException e) {
+                Log.d(e.getMessage(),"");
+            }
+            return inFile;
+        }
+
+
+        @Override
+        protected void onPostExecute(File resultFile) {
+            ReceiveCommTaskLock mComm = null;
+            mComm = new ReceiveCommTaskLock();
+
+
+            mComm.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,  mCliSocket, resultFile);
+        }
+    }
+
+    public class ReceiveCommTaskLock extends AsyncTask<Object, Object, String> {
+        SimWifiP2pSocket s;
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+
+        @Override
+        protected String doInBackground(Object... params) {
+            BufferedReader sockIn;
+            String  st;
+
+            s = (SimWifiP2pSocket) params[0];
+            File inFile = (File) params[1];
+            try {
+                sockIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
+
+
+                while ((st = sockIn.readLine()) != null) {
+                    publishProgress(st, inFile);
+                }
+            } catch (IOException e) {
+                Log.d("Error reading socket:", e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Object... values) {
+
+
+
+            JSONObject json = null;
+
+            File fileIn = (File) values[1];
+            try {
+                json = new JSONObject((String) values[0]);
+                Log.d("get email ", json.getString("email"));
+                if(json.getString("email").equals(fileIn.lockedBy)) {
+                    userWithLockIsAway = false;
+                }
+
+                devicesCounter++;
+                //Toast.makeText(getApplicationContext(), "devicesCounter " + devicesCounter +"!", Toast.LENGTH_SHORT).show();
+                Log.d("DevicesCounter is ", " devicesCounter" + " " + noOfNetworkDevices);
+                if(devicesCounter == noOfNetworkDevices && userWithLockIsAway == true)  {
+                    Toast.makeText(getApplicationContext(), "Now it's unlocked ", Toast.LENGTH_SHORT).show();
+                    fileIn.lockedBy = "Unlocked";
+                    FileRepo repo = new FileRepo(getApplicationContext());
+                    repo.update(fileIn);
+                }else{
+                    Toast.makeText(getApplicationContext(), "It's still locked ", Toast.LENGTH_SHORT).show();
+                }
+
+            }catch (JSONException e) {
+                Log.d("error", e.getMessage());
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (!s.isClosed()) {
+                try {
+                    s.close();
+                }
+                catch (Exception e) {
+                    Log.d("Error closing socket:", e.getMessage());
+                }
+            }
+            s = null;
+        }
+    }
+
+
 }
